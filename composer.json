@@ -1,0 +1,7 @@
+{
+  "name": "abdoulahi/portfolio",
+  "description": "Portfolio - dependencies for sending mail",
+  "require": {
+    "phpmailer/phpmailer": "^7.0"
+  }
+}

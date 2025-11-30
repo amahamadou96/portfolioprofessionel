@@ -1,0 +1,33 @@
+; Configuration PHP pour Portfolio Local
+; Fichier: php.ini ou .php.ini
+
+[mail]
+; En local, désactiver l'envoi d'email n'est pas grave
+; car on enregistre les messages dans contact_log.txt
+SMTP = localhost
+smtp_port = 25
+sendmail_from = abdoulahim10@gmail.com
+
+[error_reporting]
+; Afficher les erreurs en développement
+error_reporting = E_ALL
+display_errors = On
+display_startup_errors = On
+log_errors = On
+
+[extension]
+; Assurez que les extensions nécessaires sont activées
+; extension=php_curl.dll
+; extension=php_fileinfo.dll
+; extension=php_json.dll (PHP 7.2+)
+
+; Si vous utilisez XAMPP ou WAMP, vérifiez php.ini:
+; Généralement: C:\xampp\php\php.ini ou D:\wamp\bin\php\php*.*.*/php.ini
+
+; Pour lancer en local avec PHP intégré:
+; cd d:\mes projet personel\portfolio
+; php -S localhost:8000
+
+; Pour tester l'envoi d'email en local:
+; Les messages sont enregistrés dans contact_log.txt
+; et vous verrez "Message reçu avec succès!" sur le site

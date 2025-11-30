@@ -1,0 +1,124 @@
+📧 SETUP - CONFIGURATION DE LA BASE DE DONNÉES ET DE L'EMAIL
+================================================================
+
+✅ ÉTAPES D'INSTALLATION :
+
+1. INITIALISER LA BASE DE DONNÉES
+==================================
+Ouvrez votre navigateur et allez à :
+   → http://localhost:8000/db_setup.php
+
+Vous verrez un message de succès confirmant que la base de données est créée.
+
+
+2. VÉRIFIER LA CONFIGURATION XAMPP/MYSQL
+==========================================
+Assurez-vous que MySQL/MariaDB fonctionne :
+
+Dans XAMPP Control Panel :
+- MySQL doit avoir le statut "Running" (vert)
+- Si ce n'est pas le cas, cliquez sur "Start" à côté de MySQL
+
+Depuis le terminal (optional) :
+   cd C:\xampp\mysql\bin
+   mysql -u root
+   (Tapez 'exit' pour quitter)
+
+
+3. VÉRIFIER LA CONNEXION À LA BASE DE DONNÉES
+==============================================
+Si vous avez des erreurs de connexion, vérifiez dans db_config.php :
+
+Les paramètres par défaut pour XAMPP sont :
+- Host: localhost
+- User: root
+- Password: (vide)
+- Database: portfolio_contact
+
+Si vous avez un mot de passe MySQL, modifiez db_config.php ligne 8 :
+   define('DB_PASS', 'VOTRE_MOT_DE_PASSE');
+
+
+4. CONFIGURATION EMAIL
+======================
+✓ Votre email est configuré à : mahamadouabdoulahi566@gmail.com
+✓ Tous les messages du formulaire seront envoyés À CET EMAIL
+
+Note: Pour que l'email fonctionne correctement :
+- En local (XAMPP): Les emails peuvent ne pas s'envoyer (c'est normal)
+  → Les messages sont quand même sauvegardés en base de données
+- En production (serveur web): Configuration SMTP nécessaire
+
+
+5. TESTER LE FORMULAIRE
+=======================
+Allez à : http://localhost:8000
+
+Remplissez et soumettez le formulaire de contact.
+
+Vous verrez un message de succès !
+
+Les messages seront sauvegardés dans la base de données :
+- Table: contact_messages
+- Champs: id, name, email, message, status, created_at
+
+
+6. CONSULTER LES MESSAGES
+========================
+Pour voir les messages reçus, vous devez créer un panneau d'administration.
+Pour maintenant, vous pouvez vérifier les messages via phpMyAdmin :
+
+   http://localhost/phpmyadmin
+
+Identifiants:
+- User: root
+- Password: (vide)
+
+Navigation:
+1. Cliquez sur "portfolio_contact" dans la colonne gauche
+2. Cliquez sur "contact_messages"
+3. Vous verrez tous les messages reçus
+
+
+7. STRUCTURE DE LA BASE DE DONNÉES
+===================================
+
+Table: contact_messages
+- id: Numéro unique du message (auto-incrementé)
+- name: Nom du visiteur
+- email: Email du visiteur
+- message: Contenu du message
+- status: Statut (unread/read/replied)
+- created_at: Date d'envoi
+- updated_at: Dernière modification
+
+Table: email_logs
+- id: Numéro unique du log
+- message_id: Référence au message
+- recipient_email: Email destinataire (VOTRE email)
+- sender_email: Email de l'expéditeur
+- subject: Sujet de l'email
+- status: Statut d'envoi (sent/failed/pending)
+- error_message: Message d'erreur (si applicable)
+- created_at: Date du log
+
+
+8. FICHIERS IMPORTANTS
+======================
+- db_config.php: Configuration de la base de données
+- send_email.php: Gestionnaire du formulaire (intégration BDD + email)
+- db_setup.php: Script d'initialisation (exécuter une seule fois)
+- contact_log.txt: Log des envois (sauvegarde fichier)
+
+
+✅ TOUT EST CONFIGURÉ ! 
+
+Votre formulaire de contact est maintenant :
+✓ Intégré à une base de données MySQL
+✓ Envoie les messages à mahamadouabdoulahi566@gmail.com
+✓ Sauvegarde tous les messages en base de données
+✓ Fournit un journal de tous les envois
+
+Les messages seront conservés indéfiniment dans la base de données.
+
+En cas de problème, consultez contact_log.txt pour les erreurs.

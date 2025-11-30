@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PHP - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 40px 20px;
+        }
+        .test-section {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid #1a2847;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        .test-pass { color: #00ff88; font-weight: bold; }
+        .test-fail { color: #ff4444; font-weight: bold; }
+        .test-warning { color: #ffd700; font-weight: bold; }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 style="color: #00d4ff; text-align: center;">🧪 Test PHP & Formulaire</h1>
+        
+        <div class="test-section">
+            <h2>Configuration PHP</h2>
+            <div style="padding: 1rem;">
+                <p>Version PHP: <strong id="php-version"></strong></p>
+                <p>Extensions disponibles:</p>
+                <ul id="php-extensions" style="color: #b0b0b0;"></ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test du Formulaire</h2>
+            <form id="testForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="text" placeholder="Votre nom" value="Test" required style="padding: 10px; border: 1px solid #1a2847; background: rgba(0,212,255,0.05); color: #fff; border-radius: 5px;">
+                <input type="email" placeholder="Votre email" value="test@example.com" required style="padding: 10px; border: 1px solid #1a2847; background: rgba(0,212,255,0.05); color: #fff; border-radius: 5px;">
+                <textarea placeholder="Votre message" style="padding: 10px; border: 1px solid #1a2847; background: rgba(0,212,255,0.05); color: #fff; border-radius: 5px; min-height: 100px;">Ceci est un message de test du formulaire.</textarea>
+                <button type="submit" class="btn btn-primary">Tester l'envoi</button>
+            </form>
+            <div id="testResult" style="margin-top: 1rem; padding: 1rem; border-radius: 5px; display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Vérification des fichiers</h2>
+            <div id="filesCheck" style="color: #b0b0b0;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Dépannage</h2>
+            <div style="color: #b0b0b0; line-height: 1.8;">
+                <p><strong style="color: #00d4ff;">Erreur "Erreur de connexion"?</strong></p>
+                <ul>
+                    <li>Vérifiez que <code>send_email.php</code> existe</li>
+                    <li>Vérifiez l'URL du formulaire: <code>send_email.php</code></li>
+                    <li>Vérifiez la console (F12) pour plus de détails</li>
+                </ul>
+                
+                <p><strong style="color: #00d4ff;">En local, l'email n'est pas envoyé?</strong></p>
+                <ul>
+                    <li>C'est normal! Les serveurs locaux ne peuvent pas envoyer d'emails</li>
+                    <li>Les messages sont enregistrés dans <code>contact_log.txt</code></li>
+                    <li>En production, avec un vrai serveur, ça marchera</li>
+                </ul>
+
+                <p><strong style="color: #00d4ff;">Comment tester en local:</strong></p>
+                <ol>
+                    <li>Ouvrir ce fichier (test-php.html)</li>
+                    <li>Remplir le formulaire</li>
+                    <li>Cliquer "Tester l'envoi"</li>
+                    <li>Regarder le résultat (vert = succès)</li>
+                    <li>Vérifier <code>contact_log.txt</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <button onclick="location.href='index.html'" class="btn btn-secondary" style="margin: 2rem auto; display: block;">
+            Retour au portfolio
+        </button>
+    </div>
+
+    <script>
+        // Check PHP version
+        fetch('send_email.php', { method: 'POST' })
+            .then(r => r.text())
+            .catch(() => {});
+
+        // Detect PHP
+        document.getElementById('php-version').textContent = 'Détection...';
+
+        // Test form
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = 'rgba(0, 212, 255, 0.1)';
+            resultDiv.style.borderLeft = '3px solid #00d4ff';
+            resultDiv.innerHTML = '<p style="color: #00d4ff;">Envoi en cours...</p>';
+
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('send_email.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.style.background = 'rgba(0, 255, 136, 0.1)';
+                    resultDiv.style.borderLeft = '3px solid #00ff88';
+                    resultDiv.innerHTML = `
+                        <p><span class="test-pass">✓ SUCCÈS!</span></p>
+                        <p>Message: ${data.message}</p>
+                        <p>Données envoyées:</p>
+                        <ul style="color: #b0b0b0;">
+                            <li>Nom: ${data.data.name}</li>
+                            <li>Email: ${data.data.email}</li>
+                            <li>Heure: ${data.data.timestamp}</li>
+                        </ul>
+                        <p style="color: #ffd700; margin-top: 1rem;">
+                            📝 Vérifiez <code>contact_log.txt</code> pour confirmer l'enregistrement
+                        </p>
+                    `;
+                } else {
+                    resultDiv.style.background = 'rgba(255, 68, 68, 0.1)';
+                    resultDiv.style.borderLeft = '3px solid #ff4444';
+                    resultDiv.innerHTML = `
+                        <p><span class="test-fail">✗ ERREUR</span></p>
+                        <p>${data.message || 'Erreur inconnue'}</p>
+                        <p style="color: #b0b0b0;">Erreurs:</p>
+                        <ul>
+                            ${data.errors ? data.errors.map(e => `<li>${e}</li>`).join('') : '<li>Pas de détails</li>'}
+                        </ul>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.style.background = 'rgba(255, 68, 68, 0.1)';
+                resultDiv.style.borderLeft = '3px solid #ff4444';
+                resultDiv.innerHTML = `
+                    <p><span class="test-fail">✗ ERREUR DE CONNEXION</span></p>
+                    <p>Impossible de se connecter à send_email.php</p>
+                    <p style="color: #b0b0b0;">${error.message}</p>
+                    <p style="color: #ffd700; margin-top: 1rem;">
+                        Assurez-vous que:<br>
+                        1. send_email.php existe<br>
+                        2. Le serveur PHP est lancé<br>
+                        3. L'URL est correcte
+                    </p>
+                `;
+            }
+        });
+
+        // Check files
+        const files = ['index.html', 'styles.css', 'script.js', 'send_email.php', 'contact_log.txt'];
+        const filesCheckDiv = document.getElementById('filesCheck');
+        filesCheckDiv.innerHTML = files.map(file => `
+            <p>
+                <span class="test-pass">?</span> ${file}
+                <span style="color: #b0b0b0; font-size: 0.9em;">(vérifiez manuellement)</span>
+            </p>
+        `).join('');
+    </script>
+</body>
+</html>

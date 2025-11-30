@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Web Server
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./logs:/var/www/html/logs
+      - ./uploads:/var/www/html/uploads
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=portfolio
+      - MYSQL_PASSWORD=portfolio123
+      - MYSQL_DATABASE=portfolio
+    networks:
+      - portfolio-network
+    depends_on:
+      - db
+
+  # Database (Optional)
+  db:
+    image: mysql:8.0
+    container_name: portfolio_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: portfolio
+      MYSQL_USER: portfolio
+      MYSQL_PASSWORD: portfolio123
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - portfolio-network
+    expose:
+      - 3306
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

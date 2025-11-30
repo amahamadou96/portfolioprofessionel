@@ -1,0 +1,11 @@
+[2025-11-30 04:29:53] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:31:02] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:31:39] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:31:40] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:32:11] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:32:26] Name:  | Email:  | Status: FAILED - Validation errors
+[2025-11-30 04:33:55] Name: abdoulahi | Email: abdoulahim10@gmail.com | Status: LOGGED (EMAIL NOT SENT)
+[2025-11-30 05:47:07] Test email FAILED: SMTP Error: Could not authenticate.
+[2025-11-30 05:47:15] Test email FAILED: SMTP Error: Could not authenticate.
+[2025-11-30 05:55:02] Test email FAILED: SMTP Error: Could not authenticate.
+[2025-11-30 05:58:51] Test email FAILED: SMTP Error: Could not authenticate.
